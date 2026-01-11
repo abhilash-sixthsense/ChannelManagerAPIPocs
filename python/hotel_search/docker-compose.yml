@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: hotel_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis-node-1:
+    image: redis
+    command: redis-server --cluster-enabled yes --port 6379 --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6379:6379"
+
+  redis-node-2:
+    image: redis
+    command: redis-server --cluster-enabled yes --port 6380 --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6380:6379"
+
+  redis-node-3:
+    image: redis
+    command: redis-server --cluster-enabled yes --port 6381 --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6381:6379"
+
+volumes:
+  pgdata:

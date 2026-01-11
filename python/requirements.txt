@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+asyncpg
+aioredis
+bitarray
+psycopg2-binary
+faker
