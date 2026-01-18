@@ -6,11 +6,13 @@ Install redis-cli (version ≥ 5) on your host machine.
 
 Connect the nodes and create the cluster:
 
+docker compose exec redis-node-1 \
 redis-cli --cluster create \
-  127.0.0.1:6379 \
-  127.0.0.1:6380 \
-  127.0.0.1:6381 \
-  --cluster-replicas 0
+redis-node-1:6379 \
+redis-node-2:6379 \
+redis-node-3:6379 \
+--cluster-replicas 0
+
 
 
 --cluster-replicas 0 → no replicas (for local testing).

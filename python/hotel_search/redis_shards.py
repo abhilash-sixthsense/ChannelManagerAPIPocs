@@ -1,27 +1,36 @@
-import aioredis
-from typing import Dict
+from typing import Optional
 
-REDIS_SHARDS: Dict[str, str] = {
-    "NY": "redis://localhost:6379/0",
-    "LA": "redis://localhost:6380/0",
-    "CHI": "redis://localhost:6381/0",
-    "DEFAULT": "redis://localhost:6379/0"
-}
+from redis.asyncio.cluster import RedisCluster,ClusterNode
 
-_redis_clients = {}
+_redis_cluster: Optional[RedisCluster] = None
 
-async def get_redis_for_city(city: str) -> aioredis.Redis:
-    prefix = city[:3].upper()
-    url = REDIS_SHARDS.get(prefix, REDIS_SHARDS["DEFAULT"])
-    if url not in _redis_clients:
-        _redis_clients[url] = await aioredis.from_url(url)
-    return _redis_clients[url]
 
-async def bitmap_from_key(redis_client, key: str):
+async def get_redis() -> RedisCluster:
+    global _redis_cluster
+
+    if _redis_cluster is None:
+        _redis_cluster = RedisCluster(
+            startup_nodes=[
+                ClusterNode("localhost", 6379),
+                ClusterNode("localhost", 6380),
+                ClusterNode("localhost", 6381),
+            ],
+            decode_responses=False,  # keep bytes (needed for bitmap)
+            read_from_replicas=False,
+        )
+
+    return _redis_cluster
+
+
+async def bitmap_from_key(key: str):
+    redis_client = await get_redis()
+
     data = await redis_client.get(key)
     if not data:
         return None
+
     from bitarray import bitarray
+
     ba = bitarray()
     ba.frombytes(data)
     return ba

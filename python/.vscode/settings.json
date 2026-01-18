@@ -1,0 +1,32 @@
+{
+  "workbench.editor.enablePreview": true,
+  "editor.formatOnSave": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+  },
+  "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
+    "editor.defaultFormatter": "monosans.djlint"
+  },
+  "black-formatter.args": [
+    "--line-length",
+    "150"
+  ],
+  "isort.args": [
+    "--profile",
+    "black"
+  ],
+  "pylint.args": [
+    "--disable=C0111",
+    "--disable=C0116",
+    "--max-line-length=200",
+  ],
+  "djlint.formatCss": true,
+  "djlint.formatJs": true,
+  "djlint.indentJs": 2,
+  "git.autofetch": true,
+  "python.analysis.typeCheckingMode": "basic",
+}

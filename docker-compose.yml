@@ -1,15 +1,13 @@
-version: '3.8'
-
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:alpine
     container_name: channel_manager_postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres123
       POSTGRES_DB: channel_manager
     ports:
-      - "5432:5432"
+      - "5555:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -21,10 +19,10 @@ services:
       retries: 5
 
   redis:
-    image: redis:7-alpine
+    image: redis:alpine
     container_name: channel_manager_redis
     ports:
-      - "6379:6379"
+      - "6666:6379"
     volumes:
       - redis_data:/data
     networks:

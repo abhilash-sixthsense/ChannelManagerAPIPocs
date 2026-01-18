@@ -1,32 +1,56 @@
 services:
   postgres:
-    image: postgres
+    image: postgres:18.1-alpine3.23
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: postgres123
       POSTGRES_DB: hotel_db
     ports:
-      - "5432:5432"
+      - "5555:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-
   redis-node-1:
-    image: redis
-    command: redis-server --cluster-enabled yes --port 6379 --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    image: redis:8.4.0-alpine
+    command: >
+      redis-server
+      --cluster-enabled yes
+      --cluster-config-file nodes.conf
+      --cluster-node-timeout 5000
+      --appendonly yes
+      --port 6379
+      --bind 0.0.0.0
+      --protected-mode no
     ports:
       - "6379:6379"
 
   redis-node-2:
-    image: redis
-    command: redis-server --cluster-enabled yes --port 6380 --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    image: redis:8.4.0-alpine
+    command: >
+      redis-server
+      --cluster-enabled yes
+      --cluster-config-file nodes.conf
+      --cluster-node-timeout 5000
+      --appendonly yes
+      --port 6379
+      --bind 0.0.0.0
+      --protected-mode no
     ports:
       - "6380:6379"
 
   redis-node-3:
-    image: redis
-    command: redis-server --cluster-enabled yes --port 6381 --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    image: redis:8.4.0-alpine
+    command: >
+      redis-server
+      --cluster-enabled yes
+      --cluster-config-file nodes.conf
+      --cluster-node-timeout 5000
+      --appendonly yes
+      --port 6379
+      --bind 0.0.0.0
+      --protected-mode no
     ports:
       - "6381:6379"
+
 
 volumes:
   pgdata:
