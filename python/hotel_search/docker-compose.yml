@@ -9,48 +9,65 @@ services:
       - "5555:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - hotel-network
+
   redis-node-1:
     image: redis:8.4.0-alpine
     command: >
       redis-server
+      --port 6379
       --cluster-enabled yes
       --cluster-config-file nodes.conf
       --cluster-node-timeout 5000
       --appendonly yes
-      --port 6379
       --bind 0.0.0.0
       --protected-mode no
+      --loglevel notice
     ports:
       - "6379:6379"
+      - "16379:16379"
+    networks:
+      - hotel-network
 
   redis-node-2:
     image: redis:8.4.0-alpine
     command: >
       redis-server
+      --port 6380
       --cluster-enabled yes
       --cluster-config-file nodes.conf
       --cluster-node-timeout 5000
       --appendonly yes
-      --port 6379
       --bind 0.0.0.0
       --protected-mode no
+      --loglevel notice
     ports:
-      - "6380:6379"
+      - "6380:6380"
+      - "16380:16379"
+    networks:
+      - hotel-network
 
   redis-node-3:
     image: redis:8.4.0-alpine
     command: >
       redis-server
+      --port 6381
       --cluster-enabled yes
       --cluster-config-file nodes.conf
       --cluster-node-timeout 5000
       --appendonly yes
-      --port 6379
       --bind 0.0.0.0
       --protected-mode no
+      --loglevel notice
     ports:
-      - "6381:6379"
-
-
+      - "6381:6381"
+      - "16381:16379"
+    networks:
+      - hotel-network
 volumes:
   pgdata:
+
+networks:
+  hotel-network:
+    driver: bridge
