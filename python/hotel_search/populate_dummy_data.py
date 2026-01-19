@@ -22,7 +22,7 @@ def safe_longitude():
     return random.uniform(-180, 180)
 
 
-async def create_dummy_properties(n=20000):
+async def create_dummy_properties(n=200000):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
@@ -54,6 +54,11 @@ async def create_dummy_properties(n=20000):
                     print(f"Added {total} properties")
             if i % 1000 == 1:
                 print(f"Added {i} properties")
+        if batch:
+            await _flush_batch(session, batch, semaphore)
+            total += len(batch)
+            batch.clear()
+    print(f"Added {n} properties")
 
 
 async def _flush_batch(session, batch, semaphore):
